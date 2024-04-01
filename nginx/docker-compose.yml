@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - mysql
+      - php
+  mysql:
+    image: mysql
+    volumes:
+      - "mysql:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: laravel
+  php:
+    build:
+      context: php
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www/html
+
+
